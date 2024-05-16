@@ -1,0 +1,121 @@
+[
+  {
+    "repo_id": 82920488,
+    "url": "https://github.com/MdFarhanRaja/SearchableSpinner",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 69,
+    "stargazer_count": 171,
+    "size": 151,
+    "license": "licensed",
+    "num_instances": 0
+  },
+  {
+    "repo_id": 58472345,
+    "url": "https://github.com/Kalwador/Java-2D-Game",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 6,
+    "stargazer_count": 7,
+    "size": 93975,
+    "license": "licensed",
+    "num_instances": 0
+  },
+  {
+    "repo_id": 12449593,
+    "url": "https://github.com/naron5/ClassicTraveller",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 2,
+    "stargazer_count": 6,
+    "size": 294,
+    "license": "licensed",
+    "num_instances": 0
+  },
+  {
+    "repo_id": 88274548,
+    "url": "https://github.com/rosette-api/rosette-elasticsearch-plugin",
+    "stars": 15,
+    "created": "4/14/2017 2:30:26 PM +00:00",
+    "updates": "2019-12-19T14:03:15+00:00",
+    "fork": "False",
+    "license": "licensed",
+    "num_instances": 1
+  },
+  {
+    "repo_id": 98762513,
+    "url": "https://github.com/petersamokhin/vk-bot-java-sdk",
+    "stars": 42,
+    "created": "7/29/2017 10:46:18 PM +00:00",
+    "updates": "2019-12-30T18:58:03+00:00",
+    "fork": "False",
+    "license": "licensed",
+    "num_instances": 0
+  },
+  {
+    "repo_id": 107973098,
+    "url": "https://github.com/yangchong211/YCCustomText",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 34,
+    "stargazer_count": 276,
+    "size": 806,
+    "license": "licensed",
+    "num_instances": 0
+  },
+  {
+    "repo_id": 4281738,
+    "url": "https://github.com/timendum/pdf2html",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 15,
+    "stargazer_count": 18,
+    "size": 11116,
+    "license": "licensed",
+    "num_instances": 0
+  },
+  {
+    "repo_id": 2499961,
+    "url": "https://github.com/gysel/HSR-Timetable",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 4,
+    "stargazer_count": 10,
+    "size": 2854,
+    "license": "licensed",
+    "num_instances": 2
+  },
+  {
+    "repo_id": 34106488,
+    "url": "https://github.com/mythread/bbs_source",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 28,
+    "stargazer_count": 28,
+    "size": 340,
+    "license": "licensed",
+    "num_instances": 0
+  },
+  {
+    "repo_id": 156312975,
+    "url": "https://github.com/w296488320/NullProguard",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 64,
+    "stargazer_count": 286,
+    "size": 1532,
+    "license": "licensed",
+    "num_instances": 0
+  },
+  {
+    "repo_id": 194529466,
+    "url": "https://github.com/EventosJEspanol/latin-america-micro-profile",
+    "language": "Java",
+    "is_fork": false,
+    "fork_count": 6,
+    "stargazer_count": 9,
+    "size": 695,
+    "license": "licensed",
+    "num_instances": 0
+  }
+]
