@@ -1,0 +1,11 @@
+Java Files: 773
+Test Classes: 165
+Potential Focal Classes: 773
+Perfect name matching analysis
+Perfect Matches Found: 0
+Mapping test cases
+==============
+Test Classes: 165
+Mapped Test Classes: 0
+Test Cases: 0
+Mapped Test Cases: 0

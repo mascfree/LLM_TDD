@@ -1,1 +1,0 @@
-Error during grep: Command 'grep -l -r @Test --include \*.java .' returned non-zero exit status 1.

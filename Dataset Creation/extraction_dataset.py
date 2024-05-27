@@ -12,8 +12,8 @@ import re
 from TestParser import TestParser
 from functools import partial
 
-cwd = -1
-#cwd = os.getcwd()
+#cwd = -1
+cwd = os.getcwd()
 
 def analyze_project(repo, grammar_file, tmp, output):
 	"""
@@ -40,7 +40,7 @@ def analyze_project(repo, grammar_file, tmp, output):
 	(tot_tclass, tot_tc, tot_tclass_fclass, tot_mtc) = tot_mtc
 
 	#Delete
-	#shutil.rmtree(repo_path, ignore_errors=True)
+	shutil.rmtree(repo_path, ignore_errors=True)
 
 	#Print Stats
 	print("---- Results ----")
@@ -48,9 +48,6 @@ def analyze_project(repo, grammar_file, tmp, output):
 	print("Mapped Test Classes: " + str(tot_tclass_fclass))
 	print("Test Cases: " + str(tot_tc))
 	print("Mapped Test Cases: " + str(tot_mtc))
-
-	
-
 
 def extract_code_description(code):
 	"""
@@ -80,7 +77,6 @@ def extract_code_description(code):
 
 	return comments
 
-
 def find_map_test_cases(root, grammar_file, language, output, repo):
 	global cwd
 	"""
@@ -98,8 +94,6 @@ def find_map_test_cases(root, grammar_file, language, output, repo):
 	# Get the absolute path of the file
 	grammar_file = os.path.join(cwd, grammar_file)
 
-	print(grammar_file)
-
 	#Move to folder
 	if os.path.exists(root):
 		os.chdir(root)
@@ -110,26 +104,57 @@ def find_map_test_cases(root, grammar_file, language, output, repo):
 	current_directory = os.getcwd()
 	print("Directorio actual", current_directory)
 
-	#Test Classes
+
+	# Test Classes (archivos java que contiene pruebas)
 	try:
-		result = subprocess.check_output(r'grep -l -r @Test --include \*.java .', shell=True)
+		# Usa findstr en lugar de grep para buscar los archivos .java que contienen @Test
+		result = subprocess.check_output(r'findstr /M /S /C:@Test *.java', shell=True, stderr=subprocess.STDOUT)
 		tests = result.decode('ascii').splitlines()
-	except Exception as e:
-		log.write("Error during grep: {}\n".format(str(e)))
+		if not tests:
+			log.write("No se encontraron archivos con @Test.\n")
+			return 0, 0, 0, 0
+	except subprocess.CalledProcessError as e:
+		 # Manejar el caso en el que no se encontraron coincidencias
+		log.write("No se encontraron coincidencias.")
 		return 0, 0, 0, 0
+
+	# Java Files
+	try:
+		# Usa dir en lugar de find para buscar archivos .java
+		result = subprocess.check_output(f'dir /S /B "{current_directory}\\*.java"', shell=True, stderr=subprocess.STDOUT)
+		java = result.decode('ascii').splitlines()
+		if not java:
+			log.write("No se encontraron archivos Java.\n")
+			return 0, 0, 0, 0
+	except subprocess.CalledProcessError as e:
+		if "File Not Found" in e.output.decode('ascii'):
+			log.write("No se encontraron archivos Java.\n")
+		else:
+			log.write("Error durante dir: {}\n".format(str(e)))
+		return 0, 0, 0, 0
+
+	#Test Classes
+	#try:
+	#	result = subprocess.check_output(r'grep -l -r @Test --include \*.java .', shell=True)
+	#	tests = result.decode('ascii').splitlines()
+	#except Exception as e:
+	#	log.write("Error during grep: {}\n".format(str(e)))
+	#	return 0, 0, 0, 0
+	
 
 	#Java Files
-	try:
-		result = subprocess.check_output(['find', current_directory,  '-name', '*.java'])
-		java = result.decode('ascii').splitlines()
-		java = [j.replace("./", "") for j in java]
-	except Exception as e:
-		log.write("Error during find: {}\n".format(str(e)))
-		return 0, 0, 0, 0
-
+	#try:
+	#	result = subprocess.check_output(['find', current_directory,  '-name', '*.java'])
+	#	java = result.decode('ascii').splitlines()
+	#	java = [j.replace("./", "") for j in java]
+	#except Exception as e:
+	#	log.write("Error during find: {}\n".format(str(e)))
+	#	return 0, 0, 0, 0
+	
+	
 	#Potential Focal Classes
 	focals = list(set(java) - set(tests))
-	focals = [f for f in focals if not "src/test" in f]
+	focals = [f for f in focals if not "src/test" in f] # excluye archivos java que contengan src/test
 	focals_norm = [f.lower() for f in focals]
 
 	log.write("Java Files: " + str(len(java)) + '\n')
@@ -195,7 +220,6 @@ def find_map_test_cases(root, grammar_file, language, output, repo):
 	log.close()
 	return tot_tclass, tot_tc, tot_tclass_fclass, tot_mtc
 
-
 def parse_test_cases(parser, test_file):
 	"""
 	Parse source file and extracts test cases
@@ -218,7 +242,6 @@ def parse_test_cases(parser, test_file):
 				test_cases.append(method)
 
 	return test_cases
-
 
 def parse_potential_focal_methods(parser, focal_file):
 	"""
@@ -243,8 +266,6 @@ def parse_potential_focal_methods(parser, focal_file):
 				potential_focal_methods.append(method)
 
 	return potential_focal_methods
-
-
 
 def match_test_cases(test_class, focal_class, test_cases, focal_methods, log):
 	"""
@@ -305,7 +326,6 @@ def match_test_cases(test_class, focal_class, test_cases, focal_methods, log):
 	log.write("Mapped Test Cases: " + str(len(mapped_test_cases)) + '\n')
 	return mapped_test_cases
 
-
 def read_repositories(json_file_path):
 	"""
 	Read the repository java file
@@ -313,7 +333,6 @@ def read_repositories(json_file_path):
 	if os.path.isfile(json_file_path):
 		data = json.loads(open(json_file_path).read())
 	return data
-
 
 def export_mtc(repo, mtc_list, output):
 	"""
@@ -392,7 +411,6 @@ def analyze_project_lines(repo_lines, grammar_file, tmp, output):
 # 		analyze_project(repo_git, repo_id, grammar_file, tmp, output)
 
 
-
 def parse_args():
 	"""
 	Parse the args passed from the command line
@@ -425,15 +443,14 @@ def parse_args():
 
 	return vars(parser.parse_args())
 
-
 def main():
 	global cwd
 	cwd = os.getcwd()
 	args = parse_args()
-	repo_lines = "/Users/miguel/Documents/GitHub/LLMforTDD/Dataset Creation/validation.json" #args['repo_lines']
-	grammar_file ="java-grammar.so"  #args['grammar']
-	tmp ="/Users/miguel/Documents/GitHub/LLMforTDD/Dataset Creation/tmp/tmp"  #args['tmp']
-	output = "/Users/miguel/Documents/GitHub/LLMforTDD/Dataset Creation/tmp/output/"  #args['output']
+	repo_lines = r"C:\Users\miguela.silva\Downloads\LLM_TDD\Training Dataset\Repos\validation_basico.json" #args['repo_lines']
+	grammar_file = r"C:\Users\miguela.silva\Downloads\LLM_TDD\Dataset Creation\java-grammar.so"  #args['grammar']
+	tmp = r"C:\Users\miguela.silva\Downloads\LLM_TDD\Dataset Creation\tmp\tmp"  #args['tmp']
+	output = r"C:\Users\miguela.silva\Downloads\LLM_TDD\Dataset Creation\tmp\output"  #args['output']
 
 	with open(repo_lines) as f:
 		# print(f.read())

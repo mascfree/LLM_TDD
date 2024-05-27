@@ -1,13 +1,20 @@
+import tree_sitter_python as tspython
 from tree_sitter import Language, Parser
 from typing import List, Dict, Any, Set, Optional
 
 class TestParser():
 	
 	def __init__(self, grammar_file, language):
-		JAVA_LANGUAGE = Language(grammar_file, language)
-		self.parser = Parser()
-		self.parser.set_language(JAVA_LANGUAGE)
-
+		try:
+			#JAVA_LANGUAGE = Language(grammar_file, language)
+			language = Language(tspython.language())
+			self.parser = Parser(language)
+			#self.parser.set_language(JAVA_LANGUAGE)
+			self.parser.language = language
+		except Exception as e:
+			# Manejo de errores: Imprime el error y continúa con la ejecución
+			print("Error durante la inicialización de Language: {}\n".format(str(e)))
+			self.parser = None  # Opcional: Asignar None al parser en caso de error
 
 	def parse_file(self, file):
 		"""
@@ -51,8 +58,6 @@ class TestParser():
 
 		return parsed_classes
 
-
-
 	@staticmethod
 	def get_class_metadata(class_node, blob: str):
 		"""
@@ -95,8 +100,6 @@ class TestParser():
 				break
 		return metadata
 
-
-
 	@staticmethod
 	def get_class_fields(class_node, blob: str):
 		"""
@@ -135,8 +138,6 @@ class TestParser():
 			fields.append(field_dict)
 
 		return fields
-
-
 
 	@staticmethod
 	def get_function_metadata(class_identifier, function_node, blob: str):
@@ -209,7 +210,6 @@ class TestParser():
 
 		return metadata
 
-
 	def get_method_names(self, file):
 		"""
 		Extract the list of method names defined in a file
@@ -239,7 +239,6 @@ class TestParser():
 
 		return method_names
 
-
 	@staticmethod
 	def get_function_name(function_node, blob: str):
 		"""
@@ -250,7 +249,6 @@ class TestParser():
 		for n in declarators[0].children:
 			if n.type == 'identifier':
 				return TestParser.match_from_span(n, blob).strip('(')
-
 
 	@staticmethod
 	def match_from_span(node, blob: str) -> str:
@@ -267,7 +265,6 @@ class TestParser():
 		else:
 			return lines[line_start][char_start:char_end]
 
-
 	@staticmethod
 	def traverse_type(node, results: List, kind: str) -> None:
 		"""
@@ -280,7 +277,6 @@ class TestParser():
 		for n in node.children:
 			TestParser.traverse_type(n, results, kind)
 
-
 	@staticmethod
 	def is_method_body_empty(node):
 		"""
@@ -290,7 +286,6 @@ class TestParser():
 			if c.type in {'method_body', 'constructor_body'}:
 				if c.start_point[0] == c.end_point[0]:
 					return True
-
 	
 	@staticmethod
 	def children_of_type(node, types):
